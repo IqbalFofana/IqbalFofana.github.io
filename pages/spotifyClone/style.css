@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:ital,wght@1,500&display=swap');
+
+body{
+    background-color: antiquewhite;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+
+}
+
+nav ul{
+    display: flex; /*ul in the same nav */
+    align-items: center;
+    list-style-type: none; /* avoid the dafault pointed list */
+    height: 89px;
+    background-color: black;
+    color: white;
+}
+
+nav ul li{
+    padding: 0 12px; /* top-bottom = 0px, right-left = 12px */
+}
+
+.logo-img{
+    display: flex; /*ul in the same nav */
+    align-items: center;
+    font-weight: bolder;
+    font-size: 1.4rem; /* root element */
+}
+
+.logo-img img{
+    width: 80px;
+    padding: 0 10px; 
+}
+.container{
+    background-color: black;
+    color: white;
+    font-family: 'Roboto Mono', monospace;
+    margin: 10px auto;
+    display: flex;
+    min-height: 75vh; /* 75% of viewport*/
+    width: 70vw;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.song-item{
+    height: 50px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgb(79, 18, 116);
+    width: 60vw;
+    margin:12px;
+    align-items: center;
+    border-radius: 15px;
+}
+
+.song-item img{
+    margin: 23px 0;
+    width: 25px;
+}
+
+.bottom{
+    position: sticky;
+    height: 130px;
+    background-color: black;
+    color: white;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#myProgressBar{
+    width: 80vw;
+}
+
+.material-symbols-outlined {
+    margin: 15px 15px;
+    cursor: pointer;
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48
+}
