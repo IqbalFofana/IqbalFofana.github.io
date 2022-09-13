@@ -1,7 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:ital,wght@1,500&display=swap');
 
 body{
-    background-color: antiquewhite;
+    background-color: rgba(26,5,79,1);
+    background-image: linear-gradient(rgba(0,0,0,1) 0%, rgba(26,5,79,1) 100%, rgba(0,212,255,1) 100%, rgba(49,9,121,1) 100%);
+    /* font-family: 'Roboto Mono', monospace; */
+    background-repeat: no-repeat;
 }
 
 *{
@@ -36,15 +39,48 @@ nav ul li{
     padding: 0 10px; 
 }
 .container{
-    background-color: black;
+    margin: 0 auto;
+   /*  background-color: grey; */
     color: white;
     font-family: 'Roboto Mono', monospace;
-    margin: 10px auto;
+    width: 80vw;
+    height: 80vh;
     display: flex;
-    min-height: 75vh; /* 75% of viewport*/
-    width: 70vw;
-    border-radius: 15px;
-    padding: 10px;
+    flex-wrap: wrap; /*multiple line*/
+    justify-content: center;
+}
+
+.card{
+    color: white;
+    display: flex;
+    position: relative;
+    flex-direction: column; /*any make content inside the card flow vertically*/
+
+    margin: 1.5rem;
+    padding: 1.5rem;
+    width: 210px;
+    height: 300px;
+    border-radius: 5px;
+    background: rgb(30, 30, 30);
+    box-shadow: -1rem 0 3rem #000;
+}
+
+.card:hover{
+    background-color: rgb(50, 50, 50);
+    cursor: pointer;
+    transform: scale(1.03);
+    transition: all 0.3s ease;
+}
+
+.card img{
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 8px;
+    width: 200px;
+    height: 200px;
+}
+.card-names{
+    margin: 5% auto;
 }
 
 .song-item{
@@ -55,7 +91,6 @@ nav ul li{
     background-color: rgb(79, 18, 116);
     width: 60vw;
     margin:12px;
-    align-items: center;
     border-radius: 15px;
 }
 
@@ -65,7 +100,7 @@ nav ul li{
 }
 
 .bottom{
-    position: sticky;
+    position: fixed;
     height: 130px;
     background-color: black;
     color: white;
@@ -88,4 +123,9 @@ nav ul li{
     'wght' 400,
     'GRAD' 0,
     'opsz' 48
+}
+@media screen and (max-width: 678px){
+    body{
+        background-color: aqua;
+    }
 }
