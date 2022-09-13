@@ -1,13 +1,13 @@
-const myToken = "BQDF-9cp8jLPE0C5qUnyfrSPb5_qltUPA9FZv9odVp1NRMJojwvZNQ1viRU1GATIZdDmTkzrhFcy2Pn3xFMIi3BzIfF8fDeqCEjh_DPp2KFrIGEhrKLXAgDmFFVbvLydTxFRYh1bHrbekKGQ6Ge-Ww8d4qegde66Pi5psCSbYg_CKfT0GOLn2VPkTmBP9REMf4c";
+const myToken = "BQAXkb8FkI2DXzYW_QR7joP-YBjK9Pymi81smP7Afeo9mYvkSSW2uu_tfDOaxVRnrXe0uwzkH-KMaojzzFlTSxwJZyZQWDNU4dOyExAyIW7alKZ6qaIEdWMLAwlvAFFirE-ufU72zBmy07lXo7yi6_rWUSLTBzWQiPM-GxgIDhsduefpJ5eX_1e6y1g7OFKnj_M";
 //API Module
 const APIController = (function() {
     
-/*     //the function has 2 variables to get the token
-    const clientId = 'ADD YOUR CLIENT ID';
-    const clientSecret = 'ADD YOUR CLIENT SECRET';
+     //the function has 2 variables to get the token
+    const clientId = '143f27d1e8624167857fb64162b919de';
+    const clientSecret = '7b76472d2f64452889571b14f966fca7';
 
     // private methods
-    const getToken = async () => { //POST REQUEST
+    const _getToken = async () => { //POST REQUEST
 
         const result = await fetch('https://accounts.spotify.com/api/token', {
             method: 'POST',
@@ -20,50 +20,30 @@ const APIController = (function() {
 
         const data = await result.json();  //the result is a json object and we store it in a variable call data
         return data.access_token;  
-    } */
-    const getNewAlbums = async (myToken) => {
+    } 
+    const _getNewAlbums = async (token) => {
         const result = await fetch('https://api.spotify.com/v1/browse/new-releases',{
             method: 'GET',
-            headers: { 'Authorization' : 'Bearer ' + myToken}
+            headers: { 'Authorization' : 'Bearer ' + token}
         });
         const data = await result.json();
         return data.albums.items;
     }
 
-    const getAlbum = async(myToken, albumId) => {
-        const result = await fetch(`https://api.spotify.com/v1/albums/${albumId}`, {
-            method: 'GET',
-            headers: { 'Authorization' : 'Bearer ' + token}
-        });
-    }
-
-    const getGenres = async (token) => {
-
-        const result = await fetch(`https://api.spotify.com/v1/browse/categories?locale=sv_US`, {
+    const _getTracks = async(token, albumId) => {
+        const limit = 30;
+        const result = await fetch(`https://api.spotify.com/v1/albums/${albumId}/tracks?limit=${limit}`, {
             method: 'GET',
             headers: { 'Authorization' : 'Bearer ' + token}
         });
 
         const data = await result.json();
-        return data.categories.items;
+        return data.items;
     }
 
 
-    
-    const _getPlaylistByGenre = async (token, genreId) => {
 
-        const limit = 10;
-        
-        const result = await fetch(`https://api.spotify.com/v1/browse/categories/${genreId}/playlists?limit=${limit}`, {
-            method: 'GET',
-            headers: { 'Authorization' : 'Bearer ' + token}
-        });
-
-        const data = await result.json();
-        return data.playlists.items;
-    }
-
-    const _getTracks = async (token, tracksEndPoint) => {
+/*     const oldGetTracks = async (token, tracksEndPoint) => {
 
         const limit = 10;
 
@@ -74,9 +54,10 @@ const APIController = (function() {
 
         const data = await result.json();
         return data.items;
-    }
+        console.log(data.items);
+    } */
 
-    const _getTrack = async (token, trackEndPoint) => {
+    const getTrack = async (token, trackEndPoint) => {
 
         const result = await fetch(`${trackEndPoint}`, {
             method: 'GET',
@@ -88,33 +69,18 @@ const APIController = (function() {
     }
 
     return {
-        getNewAlbums(myToken){
-            return getNewAlbums(myToken);
+        getToken(){
+            return _getToken();
+        },
+        getNewAlbums(token){
+            return _getNewAlbums(token);
+        },
+        getTracks(token, albumId) {
+            return _getTracks(token, albumId);
         },
 
-        getToken() {
-            return getToken();
-        },
-        getGenres(token) {
-            return getGenres(token);
-        },
-        getPlaylistByGenre(token, genreId) {
-            return _getPlaylistByGenre(token, genreId);
-        },
-        getTracks(token, tracksEndPoint) {
-            return _getTracks(token, tracksEndPoint);
-        },
-        getTrack(token, trackEndPoint) {
-            return _getTrack(token, trackEndPoint);
-        }
     }
 })(); //to call function immediatly
-
-
-   // document.write( await APIController.getNewAlbums(myToken));
-   const albumName =  APIController.getNewAlbums(myToken);
-    console.log(albumName);
-
 
 
 //UI Module
@@ -123,9 +89,11 @@ const UIController = (function(){
     //object to hold references to hmtl selectors, so if we change some classes o ids in html file, we change just  DOM elemenets 
     const DOMElements = {
         divContainer: '.container',
+        divContainerTracks: '.container-tracks',
         divCard: '.card',
+        divCardNames: '.card-names',
         divTrack: '.track',
-        divCardNames: '.card-names'
+        divButtonBack: '#button-back'
     }
 
     //public methods
@@ -133,22 +101,61 @@ const UIController = (function(){
         inputField(){
             return{
                 container : document.querySelector(DOMElements.divContainer),
+                containerTracks : document.querySelector(DOMElements.divContainerTracks),
                 card : document.querySelector(DOMElements.divCard),
-                cardnames : document.querySelector(DOMElements.divTrack),
-                track : document.querySelector(DOMElements.divCardNames)
+                cardnames : document.querySelector(DOMElements.divCardNames),
+                track : document.querySelector(DOMElements.divTrack),
+                buttonBack : document.querySelector(DOMElements.divButtonBack)
             }
         },
 
-        createCard(albumName, artistName, imageUrl) {
-            const html = `  <div class="card">
+        createCard(albumName, artistName, imageUrl, albumId) {
+            const html = `  <div class="card" id="${albumId}" onclick="">
                                 <img src="${imageUrl}" alt="">
                                 <div class="card-names">
-                                    <h4><b>${albumName}</b></h4>
-                                    <b>${artistName}</b>
+                                    <b>${albumName}</b>
+                                    <p>${artistName}</p>
                                 </div>
                             </div>`;
-            document.querySelector(DOMElements.divContainer).insertAdjacentHTML('beforeend', html);
-        }
+            document.querySelector(DOMElements.divContainer).insertAdjacentHTML('beforeend', html); //insert element as the last child of paretn element (container)
+        },
+
+        createTrack(trackName, trackNumber, trackDuration){
+            const html =  ` <div class="track" onclick="">
+                                <span class="track-number">${trackNumber}</span>
+                                <span>${trackName}</span>
+                                <span>${this.millsToMinutes(trackDuration)}</span>
+                            </div>`;
+            document.querySelector(DOMElements.divContainerTracks).insertAdjacentHTML('beforeend', html);                
+        },
+
+        hideContainerTracks(){
+            this.inputField().containerTracks.style.display = "none";
+        },
+
+        showContainerTracks(){
+            this.inputField().containerTracks.style.display = "block";
+        },
+
+        storeToken(value) {
+            document.querySelector(DOMElements.divContainer).value = value;
+        },
+
+        getStoredToken() {
+            return {
+                token: document.querySelector(DOMElements.divContainer).value
+            }
+        },
+
+        millsToMinutes(mills){
+            var minutes = Math.floor(millis / 60000);
+            var seconds = ((millis % 60000) / 1000).toFixed(0);
+            return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+        },
+
+        resetCards(){
+            this.inputField().container.innerHTML = '';
+        } 
     }
 
 
@@ -161,25 +168,84 @@ const UIController = (function(){
 
 
 const APPController = (function(UICtrl, APICtrl){
+
+    // get input field object ref
+    const DOMInputs = UICtrl.inputField();
+
     //get new Albums on page load
     const loadNewAlbums = async () => {
-        const albumItems = await APIController.getNewAlbums(myToken);
+        const token = await APICtrl.getToken();
+        UICtrl.storeToken(token);
+        const albumItems = await APICtrl.getNewAlbums(token);
         //UI ....
         for(let i=0; i<albumItems.length; i++){
-            console.log("Nome Album :"+ albumItems[i].name + " Nome Artista : "+
-            albumItems[i].artists[0].name +" Image : "+ albumItems[i].images[1].url
-            );
-            UICtrl.createCard(albumItems[i].name, albumItems[i].artists[0].name, albumItems[i].images[1].url);
-        }
-        
-        
+            //console.log("Nome Album :"+ albumItems[i].name + " Nome Artista : "+
+            //albumItems[i].artists[0].name +" Image : "+ albumItems[i].images[1].url
+            //);
+            UICtrl.createCard(albumItems[i].name, albumItems[i].artists[0].name, albumItems[i].images[1].url, albumItems[i].id);
+        }    
     }
+
+    const loadTraks = async (albumId) => {
+        const trackItems = await APICtrl.getTracks(token, albumId);
+            console.log(trackItems);
+        
+         for(let i=0; i<trackItems.length; i++){
+            UICtrl.createTrack(trackItems[i].name, trackItems[i].track_number, trackItems[i].duration_ms);
+        } 
+    }
+
+    DOMInputs.container.addEventListener('click', async(e) => {  
+        e.preventDefault(); //prevent page reset 
+        console.log("CLICCCATO UN ALBUM : "+ e.target.id);
+        const token = UICtrl.getStoredToken().token;    
+        const albumId = e.target.id;
+        loadTraks(albumId);
+        UICtrl.resetCards(); 
+        UICtrl.showContainerTracks();
+
+    });
+
+    DOMInputs.buttonBack.addEventListener('click', async(e) => {  
+        e.preventDefault(); //prevent page reset 
+        const token = UICtrl.getStoredToken().token;    
+        console.log("CLICCCATO INDIETRO : ");
+        UICtrl.hideContainerTracks(); 
+        loadNewAlbums();
+
+    });
+
 
     return {
         init(){
+            UICtrl.hideContainerTracks(); //1° hide the container-tracks div
             loadNewAlbums();
         }
     }
+
 })(UIController,APIController); 
 
-APPController.init();
+ APPController.init();
+
+
+
+/* const prova = UIController.inputField();
+prova.buttonBack.addEventListener('click', async(e) => {   
+    console.log("CLICCCATO");
+    
+}) */
+
+
+    //togliere le card
+    // UIController.resetCard();
+
+    //salvare id dell'album
+    
+    //mostrare dentro il container un div con immagine, nome album e nome artista
+    //mostrare TITOLO e durata
+    //mostrare un hr da separatore
+    //mostrare un div con   n° traccia | nome brano | durata (for each track)
+
+
+
+//showTracks();

@@ -42,7 +42,7 @@ nav ul li{
     margin: 0 auto;
    /*  background-color: grey; */
     color: white;
-    font-family: 'Roboto Mono', monospace;
+   /*  font-family: 'Roboto Mono', monospace; */
     width: 80vw;
     height: 80vh;
     display: flex;
@@ -80,9 +80,13 @@ nav ul li{
     height: 200px;
 }
 .card-names{
-    margin: 5% auto;
+    margin: 15% auto;
 }
-
+.card-names p{
+    margin: 10% auto;
+    color: rgb(180, 180, 180);
+    font-weight: lighter;
+}
 .song-item{
     height: 50px;
     display: flex;
@@ -99,6 +103,61 @@ nav ul li{
     width: 25px;
 }
 
+
+.album-profile{
+    background-color: red;
+    width: 80vw;
+    display: flex;
+    padding: 3%;
+    font-size: x-large;
+}
+
+.album-profile img{
+    background-color: white;
+    width: 300px;
+    height: 300px;
+    margin: 2%;
+}
+
+.card-names-profile{
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    background-color: blue;
+    font-size: xx-large;
+    height: 300px;
+    margin: 2%;
+}
+
+.first-line{
+    margin: 0 3%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+hr {
+    border: 0;
+    height: 1;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.track{
+    margin: 3%;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.track:hover{
+    background-color: rgba(50, 50, 50, 0.45);
+    cursor: pointer;
+}
+
+
+
 .bottom{
     position: fixed;
     height: 130px;
@@ -114,7 +173,11 @@ nav ul li{
 #myProgressBar{
     width: 80vw;
 }
-
+button{
+    background: none;
+    color: white;
+    border: 0;
+}
 .material-symbols-outlined {
     margin: 15px 15px;
     cursor: pointer;
