@@ -27,6 +27,9 @@ nav ul li{
     padding: 0 12px; /* top-bottom = 0px, right-left = 12px */
 }
 
+a{
+    color: white;
+}
 .logo-img{
     display: flex; /*ul in the same nav */
     align-items: center;
@@ -49,13 +52,18 @@ nav ul li{
     flex-wrap: wrap; /*multiple line*/
     justify-content: center;
 }
-
+.container-cards{
+    width: 80vw;
+    display: flex;
+    flex-wrap: wrap; /*multiple line*/
+    justify-content: center;
+}
 .card{
     color: white;
     display: flex;
     position: relative;
     flex-direction: column; /*any make content inside the card flow vertically*/
-
+    cursor: pointer;
     margin: 1.5rem;
     padding: 1.5rem;
     width: 210px;
@@ -105,7 +113,6 @@ nav ul li{
 
 
 .album-profile{
-    background-color: red;
     width: 80vw;
     display: flex;
     padding: 3%;
@@ -113,6 +120,7 @@ nav ul li{
 }
 
 .album-profile img{
+    border-radius: 5px;
     background-color: white;
     width: 300px;
     height: 300px;
@@ -123,7 +131,6 @@ nav ul li{
     display: flex;
     flex-direction: column;
     justify-content: end;
-    background-color: blue;
     font-size: xx-large;
     height: 300px;
     margin: 2%;
@@ -157,7 +164,9 @@ hr {
 }
 
 
-
+#button-back:hover{
+    transform: scale(1.03);
+}
 .bottom{
     position: fixed;
     height: 130px;
@@ -173,11 +182,7 @@ hr {
 #myProgressBar{
     width: 80vw;
 }
-button{
-    background: none;
-    color: white;
-    border: 0;
-}
+
 .material-symbols-outlined {
     margin: 15px 15px;
     cursor: pointer;
@@ -187,8 +192,22 @@ button{
     'GRAD' 0,
     'opsz' 48
 }
-@media screen and (max-width: 678px){
-    body{
-        background-color: aqua;
+@media screen and (max-width: 650px){
+
+    .album-profile img{
+        width: 250px;
+        height: 250px;
+        justify-content: end;
     }
+
+    .card-names-profile{
+        height: 250px;
+        font-size: small;
+    }
+
+    .track{
+        font-size: small;
+    }
+
+
 }

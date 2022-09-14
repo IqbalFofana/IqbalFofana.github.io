@@ -90,6 +90,7 @@ const UIController = (function(){
     const DOMElements = {
         divContainer: '.container',
         divContainerTracks: '.container-tracks',
+        divContainerCards: '.container-cards',
         divCard: '.card',
         divCardNames: '.card-names',
         divTrack: '.track',
@@ -101,23 +102,24 @@ const UIController = (function(){
         inputField(){
             return{
                 container : document.querySelector(DOMElements.divContainer),
+                containerCards : document.querySelector(DOMElements.divContainerCards),
                 containerTracks : document.querySelector(DOMElements.divContainerTracks),
-                card : document.querySelector(DOMElements.divCard),
-                cardnames : document.querySelector(DOMElements.divCardNames),
-                track : document.querySelector(DOMElements.divTrack),
+                card : document.querySelectorAll(DOMElements.divCard),
+                cardnames : document.querySelectorAll(DOMElements.divCardNames),
+                track : document.querySelectorAll(DOMElements.divTrack),
                 buttonBack : document.querySelector(DOMElements.divButtonBack)
             }
         },
 
         createCard(albumName, artistName, imageUrl, albumId) {
-            const html = `  <div class="card" id="${albumId}" onclick="">
+            const html = `  <div class="card" id="${albumId}" >
                                 <img src="${imageUrl}" alt="">
                                 <div class="card-names">
                                     <b>${albumName}</b>
                                     <p>${artistName}</p>
                                 </div>
                             </div>`;
-            document.querySelector(DOMElements.divContainer).insertAdjacentHTML('beforeend', html); //insert element as the last child of paretn element (container)
+            document.querySelector(DOMElements.divContainerCards).insertAdjacentHTML('beforeend', html); //insert element as the last child of paretn element (containerCards)
         },
 
         createTrack(trackName, trackNumber, trackDuration){
@@ -126,7 +128,15 @@ const UIController = (function(){
                                 <span>${trackName}</span>
                                 <span>${this.millsToMinutes(trackDuration)}</span>
                             </div>`;
+                
             document.querySelector(DOMElements.divContainerTracks).insertAdjacentHTML('beforeend', html);                
+        },
+
+        createAlbumHeader(albumName, artistName, imageUrl){
+            const htmlFirstLine = ` <div class="album-profile" ><img src="${imageUrl}" alt="">
+            <div class="card-names-profile"><b>${albumName}</b><p>${artistName}</p></div></div>
+            <div class="first-line"><span>#</span><span>TITLE</span><span class="material-symbols-outlined">schedule</span></div><hr>`;
+            document.querySelector(DOMElements.divContainerTracks).insertAdjacentHTML('beforeend', htmlFirstLine);
         },
 
         hideContainerTracks(){
@@ -148,14 +158,18 @@ const UIController = (function(){
         },
 
         millsToMinutes(mills){
-            var minutes = Math.floor(millis / 60000);
-            var seconds = ((millis % 60000) / 1000).toFixed(0);
+            var minutes = Math.floor(mills / 60000);
+            var seconds = ((mills % 60000) / 1000).toFixed(0);
             return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
         },
 
         resetCards(){
-            this.inputField().container.innerHTML = '';
-        } 
+            this.inputField().containerCards.innerHTML = '';
+        }, 
+
+        resetTracks(){
+            this.inputField().containerTracks.innerHTML = '';
+        }
     }
 
 
@@ -186,31 +200,52 @@ const APPController = (function(UICtrl, APICtrl){
         }    
     }
 
-    const loadTraks = async (albumId) => {
+    const loadTraks = async (token, albumId) => {
         const trackItems = await APICtrl.getTracks(token, albumId);
             console.log(trackItems);
         
-         for(let i=0; i<trackItems.length; i++){
+        
+        
+        for(let i=0; i<trackItems.length; i++){
             UICtrl.createTrack(trackItems[i].name, trackItems[i].track_number, trackItems[i].duration_ms);
         } 
     }
 
-    DOMInputs.container.addEventListener('click', async(e) => {  
+    const getCardElements = async (albumId) =>{
+        var parent = document.getElementById(albumId);
+
+        var imageUrl = parent.children[0].src;
+        var albumName  = parent.children[1].children[0].innerHTML; 
+        var artisName  = parent.children[1].children[1].innerHTML; 
+        return {
+            albumName,
+            artisName,
+            imageUrl 
+        }
+    }
+
+
+    DOMInputs.containerCards.addEventListener('click', async(e) => {  
         e.preventDefault(); //prevent page reset 
-        console.log("CLICCCATO UN ALBUM : "+ e.target.id);
+        console.log("CLICCCATO: "+ e.currentTarget);
         const token = UICtrl.getStoredToken().token;    
         const albumId = e.target.id;
-        loadTraks(albumId);
+        
+        UICtrl.createAlbumHeader((await getCardElements(e.target.id)).albumName, (await getCardElements(e.target.id)).artisName, (await getCardElements(e.target.id)).imageUrl);
+        loadTraks(token, albumId);
+
         UICtrl.resetCards(); 
         UICtrl.showContainerTracks();
 
-    });
+    }, true);
+    
+
 
     DOMInputs.buttonBack.addEventListener('click', async(e) => {  
         e.preventDefault(); //prevent page reset 
         const token = UICtrl.getStoredToken().token;    
         console.log("CLICCCATO INDIETRO : ");
-        UICtrl.hideContainerTracks(); 
+        UICtrl.resetTracks();
         loadNewAlbums();
 
     });
@@ -226,6 +261,19 @@ const APPController = (function(UICtrl, APICtrl){
 })(UIController,APIController); 
 
  APPController.init();
+
+
+ const ID = "6NuGZnOc88LcZpEkJIbO50";
+const parent = document.getElementById("card-id");
+console.log(parent.children);
+console.log(parent.children[0].src);
+console.log(parent.children[1].children[0].innerHTML);
+console.log(parent.children[1].children[1].innerHTML);
+
+
+
+
+
 
 
 
