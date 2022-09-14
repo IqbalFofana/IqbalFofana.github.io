@@ -192,21 +192,21 @@ hr {
     'GRAD' 0,
     'opsz' 48
 }
-@media screen and (max-width: 650px){
+@media screen and (max-width: 680px){
 
     .album-profile img{
-        width: 250px;
-        height: 250px;
+        width: 180px;
+        height: 180px;
         justify-content: end;
     }
 
     .card-names-profile{
-        height: 250px;
+        height: 180px;
         font-size: small;
     }
 
-    .track{
-        font-size: small;
+    span{
+        font-size: x-small;
     }
 
 
