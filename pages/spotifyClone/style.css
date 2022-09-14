@@ -206,8 +206,24 @@ hr {
     }
 
     span{
-        font-size: x-small;
+        font-size: xx-small;
     }
 
 
+}
+
+@media screen and (max-width: 380px){
+    .album-profile img{
+        width: 150px;
+        height: 150px;
+        justify-content: end;
+    }
+
+    .card-names-profile{
+        height: 150px;
+        font-size: xx-small;
+    }
+    span{
+        font-size: 7px;
+    }
 }

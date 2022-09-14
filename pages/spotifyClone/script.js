@@ -193,9 +193,6 @@ const APPController = (function(UICtrl, APICtrl){
         const albumItems = await APICtrl.getNewAlbums(token);
         //UI ....
         for(let i=0; i<albumItems.length; i++){
-            //console.log("Nome Album :"+ albumItems[i].name + " Nome Artista : "+
-            //albumItems[i].artists[0].name +" Image : "+ albumItems[i].images[1].url
-            //);
             UICtrl.createCard(albumItems[i].name, albumItems[i].artists[0].name, albumItems[i].images[1].url, albumItems[i].id);
         }    
     }
@@ -227,7 +224,6 @@ const APPController = (function(UICtrl, APICtrl){
 
     DOMInputs.containerCards.addEventListener('click', async(e) => {  
         e.preventDefault(); //prevent page reset 
-        console.log("CLICCCATO: "+ e.currentTarget);
         const token = UICtrl.getStoredToken().token;    
         const albumId = e.target.id;
         
@@ -243,8 +239,6 @@ const APPController = (function(UICtrl, APICtrl){
 
     DOMInputs.buttonBack.addEventListener('click', async(e) => {  
         e.preventDefault(); //prevent page reset 
-        const token = UICtrl.getStoredToken().token;    
-        console.log("CLICCCATO INDIETRO : ");
         UICtrl.resetTracks();
         loadNewAlbums();
 
@@ -261,20 +255,6 @@ const APPController = (function(UICtrl, APICtrl){
 })(UIController,APIController); 
 
  APPController.init();
-
-
- const ID = "6NuGZnOc88LcZpEkJIbO50";
-const parent = document.getElementById("card-id");
-console.log(parent.children);
-console.log(parent.children[0].src);
-console.log(parent.children[1].children[0].innerHTML);
-console.log(parent.children[1].children[1].innerHTML);
-
-
-
-
-
-
 
 
 /* const prova = UIController.inputField();
